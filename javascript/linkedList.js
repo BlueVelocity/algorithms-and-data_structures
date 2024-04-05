@@ -110,6 +110,19 @@ class linkedList {
       }
     return null;
   }
+
+  toString() {
+    //format (value) -> (value) -> null
+    if (this.root === null) return 'null';
+    let listString = '';
+    let currentNode = this.root;
+    while(currentNode != null) {
+      listString += `(${currentNode.data}) -> `
+      currentNode = currentNode.next;
+    }
+    listString += 'null'
+    return listString;
+  }
 }
 
 const list = new linkedList();
@@ -119,4 +132,4 @@ list.append(9);
 list.prepend(7);
 //Final result: 7,5,2,9
 
-console.log(list.find(1))
+console.log(list.toString())
