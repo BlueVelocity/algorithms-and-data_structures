@@ -123,6 +123,46 @@ class linkedList {
     listString += 'null'
     return listString;
   }
+
+  insertAt(value, index) {
+    try {
+      if (this.root === null) return new Error('Empty list');
+      let newNode = new Node(value);
+      let currentNode = this.root;
+      let previousNode = currentNode;
+      for(let i = 0; i < index; i++) {
+        previousNode = currentNode;
+        currentNode = currentNode.next;
+      }
+      newNode.next = currentNode;
+      previousNode.next = newNode; 
+    } catch(error) {
+      if (error.name === 'TypeError') {
+        console.log('Index non-existent');
+      } else {
+        console.log(error);
+      }
+    }
+  }
+
+  removeAt(index) {
+    try {
+      if (this.root === null) return new Error('Empty list');
+      let currentNode = this.root;
+      let previousNode = currentNode;
+      for(let i = 0; i < index; i++) {
+        previousNode = currentNode;
+        currentNode = currentNode.next;
+      }
+      previousNode.next = currentNode.next; 
+    } catch (error) {
+       if (error.name === 'TypeError') {
+        console.log('Index non-existent');
+      } else {
+        console.log(error);
+      }
+    }
+  }
 }
 
 const list = new linkedList();
@@ -131,5 +171,9 @@ list.append(2);
 list.append(9);
 list.prepend(7);
 //Final result: 7,5,2,9
+
+list.insertAt(100, 2);
+list.removeAt(3);
+//Final result: 7,5,100,9
 
 console.log(list.toString())
