@@ -63,6 +63,53 @@ class linkedList {
     }
     return currentNode;
   }
+
+  at(index) {
+    if (this.root === null) return new Error('Empty list');
+    let currentNode = this.root;
+    for (let i = 0; i < index; i++) {
+      if (currentNode.next === null) return new Error('Index exceeds list length');
+      currentNode = currentNode.next;
+    }
+    return currentNode;
+  }
+
+  pop() {
+    if (this.root === null) return new Error('Empty list');
+    if (this.root.next === null) {
+      this.root = null;
+    } else {
+      let previousNode = this.root;
+      let currentNode = this.root.next;
+      while(currentNode.next != null) {
+        previousNode = currentNode;
+        currentNode = currentNode.next;
+      }
+      previousNode.next = null;
+    }
+  }
+
+  contains(value) {
+    if (this.root === null) return new Error('Empty list');
+    let currentNode = this.root;
+    while(currentNode != null) {
+      if (currentNode.data === value) return true;
+      currentNode = currentNode.next;
+    }
+    return null;
+  }
+
+  find(value) {
+    if (this.root === null) return new Error('Empty list');
+      let currentNode = this.root;
+      let index = 0;
+      while(currentNode != null) {
+        if (currentNode.data === value) return index;
+        currentNode = currentNode.next;
+        index += 1;
+      }
+    return null;
+  }
 }
 
 const list = new linkedList();
@@ -72,4 +119,4 @@ list.append(9);
 list.prepend(7);
 //Final result: 7,5,2,9
 
-console.log(list.head())
+console.log(list.find(1))
