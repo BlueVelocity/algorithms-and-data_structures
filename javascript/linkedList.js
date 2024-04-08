@@ -5,7 +5,7 @@ class Node {
   }
 }
 
-class linkedList {
+class LinkedList {
   constructor() {
     this.root = null;
   }
@@ -165,15 +165,4 @@ class linkedList {
   }
 }
 
-const list = new linkedList();
-list.append(5);
-list.append(2);
-list.append(9);
-list.prepend(7);
-//Final result: 7,5,2,9
-
-list.insertAt(100, 2);
-list.removeAt(3);
-//Final result: 7,5,100,9
-
-console.log(list.toString())
+export {Node, LinkedList};
