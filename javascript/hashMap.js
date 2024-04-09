@@ -43,6 +43,14 @@ class HashLinkedList extends LinkedList {
 class HashMap {
   constructor() {
     this.buckets = []; 
+    this.bucketsLength = 16;
+  }
+
+//simulates fixed bucket length
+  accessBucket(index) {
+    if (index < 0 || index >= this.bucketsLength) {
+      throw new Error("Trying to access index out of bound");
+    }
   }
 
   hash(key) {
@@ -50,7 +58,7 @@ class HashMap {
 
     const primeNumber = 31;
     for (let i = 0; i < key.length; i++) {
-      hashCode = (primeNumber + hashCode + key.charCodeAt(i)) % 16;
+      hashCode = (primeNumber + hashCode + key.charCodeAt(i)) % this.bucketsLength;
     }
 
     return hashCode;
@@ -58,6 +66,7 @@ class HashMap {
 
   set(key, value) {
     const hashVal = this.hash(key);
+    this.accessBucket(hashVal);
 
     if (this.buckets[hashVal] === undefined) {
       const list = new HashLinkedList();
@@ -70,7 +79,13 @@ class HashMap {
 
   get(key) {
     const hashVal = this.hash(key);
+    this.accessBucket(hashVal);
 
     return this.buckets[hashVal].getValue(key); 
   }
 }
+
+const hashMap = new HashMap();
+
+hashMap.set('customKey', 'customVal');
+console.log(hashMap)
