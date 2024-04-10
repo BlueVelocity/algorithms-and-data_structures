@@ -1,5 +1,3 @@
-import {LinkedList} from  "./linkedList.js";
-
 class HashNode {
   constructor(key, value) {
     this.key = key;
@@ -8,7 +6,11 @@ class HashNode {
   }
 }
 
-class HashLinkedList extends LinkedList {
+class HashLinkedList {
+  constructor() {
+    this.root = null;
+  }
+
   append(key, value) {
     const newNode = new HashNode(key, value);
 
@@ -16,6 +18,14 @@ class HashLinkedList extends LinkedList {
       this.root = newNode;
     } else {
       this.appendNode(this.root, newNode);
+    }
+  }
+
+  appendNode(node, newNode) {
+    if (node.next === null) {
+      node.next = newNode;
+    } else {
+      this.appendNode(node.next, newNode);
     }
   }
 
@@ -113,6 +123,33 @@ class HashMap {
     }
   }
 
+  has(key) {
+    const hashVal = this.hash(key);
+    this.accessBucket(hashVal);
+
+    if (this.buckets[hashVal] != undefined) {
+      if (this.buckets[hashVal].getValue(key) != undefined); 
+    } else {
+      console.error(`No Key: '${key}'`);
+    }
+  }
+
+  remove(key) {
+
+  }
+
+  length() {
+
+  }
+
+  clear() {
+
+  }
+
+  keys() {
+
+  } 
+
   entries() {
     const nodes = [];
     this.buckets.forEach( (bucketContent) => {
@@ -135,7 +172,6 @@ function testHashMap(numberOfPairs) {
   }
 
   console.log(hashMap)
-  console.log(hashMap.get('Key7'))
 }
 
 testHashMap(62);
