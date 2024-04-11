@@ -50,6 +50,26 @@ class HashLinkedList {
     return null;
   }
 
+  getKeys() {
+    let currentNode = this.root;
+    const keys = [];
+    while(currentNode != null) {
+      keys.push(currentNode.key);
+      currentNode = currentNode.next;
+    }
+    return keys;
+  }
+
+  getValues() {
+    let currentNode = this.root;
+    const values = [];
+    while(currentNode != null) {
+      values.push(currentNode.value);
+      currentNode = currentNode.next;
+    }
+    return values;
+  }
+
   getKeysAndValues() {
     let currentNode = this.root;
     const keyValuePair = [];
@@ -58,6 +78,42 @@ class HashLinkedList {
       currentNode = currentNode.next;
     }
     return keyValuePair;
+  }
+
+  size() {
+    let count = 0;
+    let currentNode = this.root;
+    while(currentNode != null) {
+      count += 1;
+      currentNode = currentNode.next;
+    }
+    return count;
+  }
+
+   containsKey(key) {
+    if (this.root === null) return new Error('Empty list');
+    let currentNode = this.root;
+    while(currentNode != null) {
+      if (currentNode.key === key) return true;
+      currentNode = currentNode.next;
+    }
+    return false;
+  }
+
+  removeAt(key) {
+    if (this.root === null) return new Error('Empty list');
+    if (this.root.key === key) {
+      this.root = this.root.next;
+    } else {
+      let currentNode = this.root.next;
+      let previousNode = this.root; 
+      while(currentNode != null) {
+        if (currentNode.key === key) break;
+        previousNode = currentNode;
+        currentNode = currentNode.next;
+      }  
+      previousNode.next = currentNode.next;
+    }
   }
 }
 
@@ -126,29 +182,57 @@ class HashMap {
   has(key) {
     const hashVal = this.hash(key);
     this.accessBucket(hashVal);
+    if (this.buckets[hashVal] != undefined) {
+      return this.buckets[hashVal].containsKey(key); 
+    } else {
+      return false;
+    }
+  }
+
+  remove(key) {
+    const hashVal = this.hash(key);
+    this.accessBucket(hashVal);
 
     if (this.buckets[hashVal] != undefined) {
-      if (this.buckets[hashVal].getValue(key) != undefined); 
+      this.buckets[hashVal].removeAt(key);
     } else {
       console.error(`No Key: '${key}'`);
     }
   }
 
-  remove(key) {
-
-  }
-
   length() {
-
+    let counter = 0;
+    this.buckets.forEach( (bucketContent) => {
+      if (bucketContent != undefined) {
+        counter += bucketContent.size(); 
+      }
+    });
+    return counter;
   }
 
   clear() {
-
+    this.buckets = [];
   }
 
   keys() {
+    let keys = [];
+    this.buckets.forEach( (bucketContent) => {
+      if (bucketContent != undefined) {
+        keys = keys.concat(bucketContent.getKeys());
+      }
+    })
+    return keys;
+  }
 
-  } 
+  values() {
+    let values = [];
+    this.buckets.forEach( (bucketContent) => {
+      if (bucketContent != undefined) {
+        values = values.concat(bucketContent.getValues());
+      }
+    })
+    return values;
+  }
 
   entries() {
     const nodes = [];
@@ -171,7 +255,6 @@ function testHashMap(numberOfPairs) {
     hashMap.set(key, value);
   }
 
-  console.log(hashMap)
+  console.log(hashMap);
+  return hashMap;
 }
-
-testHashMap(62);
