@@ -2,7 +2,7 @@ function mergeSort(arr) {
   if (arr.length == 1) return arr;
 
   const leftArr = mergeSort(arr.slice(0, Math.round(arr.length / 2)))
-  const rightArr = mergeSort(arr.slice(Math.round(arr.length / 2), arr.length))
+  const rightArr = mergeSort(arr.slice(Math.round(arr.length / 2)))
 
   const newArr = []
 
