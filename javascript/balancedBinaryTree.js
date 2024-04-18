@@ -29,7 +29,9 @@ function Tree() {
       let sortedArr = [];
 
       while (left.length > 0 || right.length > 0) {
-        if (left[0] >= right[0]) {
+        if (left[0] === right [0]) {
+          right.shift();
+        } else if (left[0] >= right[0]) {
           sortedArr.push(right.shift());
         } else if (right[0] >= left[0]) {
           sortedArr.push(left.shift());
