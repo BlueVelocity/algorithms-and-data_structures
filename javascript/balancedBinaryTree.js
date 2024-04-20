@@ -141,6 +141,33 @@ function Tree() {
       return currentNode;
     },
 
+    levelOrder(callback) { //traverses tree breadth first, applying callback to each node, or returning an array of values
+      let queue = [this.root];
+      let values = [];
+
+      while (queue.length > 0) {
+        let currentNode = queue.shift();
+
+        if (currentNode.left != null) {
+          queue.push(currentNode.left);
+        }
+
+        if (currentNode.right != null) {
+          queue.push(currentNode.right);
+        }
+        
+        values.push(currentNode.data);
+
+        if (callback !== undefined) {
+          callback(currentNode);
+        }
+      }
+
+      if (callback === undefined) {
+        return values;
+      }
+    },
+
     root: null
   }
 }
