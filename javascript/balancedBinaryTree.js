@@ -141,7 +141,7 @@ function Tree() {
       return currentNode;
     },
 
-    levelOrder(callback) { //traverses tree breadth first, applying callback to each node, or returning an array of values
+    levelOrder(callback) { //iterative breadth-first traversal implementation
       const queue = [this.root];
       const values = [];
 
@@ -168,7 +168,7 @@ function Tree() {
       }
     },
 
-    inOrder(callback) {
+    inOrder(callback) {//iterative in-order depth-first traversal implementation
       const values = [];
       let currentNode = this.root; 
       const stack = [];
@@ -179,20 +179,77 @@ function Tree() {
           currentNode = currentNode.left;
         } else {
           currentNode = stack.pop();
+          if (callback !== undefined) {
+            callback(currentNode);
+          }
           values.push(currentNode.data);
           currentNode = currentNode.right;
         }
       }
-
-      return values;
+      
+      if (callback === undefined) {
+        return values;
+      }
     },
 
-    preOrder(callback) {
+    preOrder(callback) {//iterative pre-order depth-first traversal implementation
+      const values = [];
+      let currentNode = this.root; 
+      const stack = [];
 
+      while (currentNode !== null || stack.length !== 0) {
+        if (currentNode !== null) {
+          stack.push(currentNode);
+          values.push(currentNode.data);
+          if (callback !== undefined) {
+            callback(currentNode);
+          }
+          currentNode = currentNode.left;
+        } else {
+          currentNode = stack.pop();
+          currentNode = currentNode.right;
+        }
+      }
+      
+      if (callback === undefined) {
+        return values;
+      }
     },
 
-    postOrder(callback) {
+    postOrder(callback) {//iterative post-order depth-first traversal implementation
+      const values = [];
+      let currentNode = this.root; 
+      const stack = [];
 
+      while (currentNode !== null || stack.length !== 0) {
+        if (currentNode === null) {
+          currentNode = stack.pop();
+
+          if (currentNode.right === stack[stack.length - 1]) {
+            const tempNode = currentNode;
+            currentNode = stack.pop();
+            stack.push(tempNode);
+          } else {
+            if (callback !== undefined) {
+              callback(currentNode);
+            }
+            values.push(currentNode.data);
+            currentNode = null;
+          }
+        } else {
+          if (currentNode.right !== null) {
+            stack.push(currentNode.right);
+          } 
+
+          stack.push(currentNode);
+          currentNode = currentNode.left;
+        }
+
+      }
+      
+      if (callback === undefined) {
+        return values;
+      }
     },
 
     root: null
@@ -212,11 +269,14 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
    }
  };
 
-const sortedArray = [1, 2, 3, 4, 5, 22, 44, 66,67, 98];
+const sortedArray = [1, 2, 3, 4, 5, 22, 44, 66, 67, 98];
 const unsortedArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree();
 
 tree.buildTree(unsortedArray);
 
 prettyPrint(tree.root);
-console.log(tree.inOrder())
+
+console.log(tree.inOrder());
+console.log(tree.preOrder());
+console.log(tree.postOrder());
