@@ -142,8 +142,8 @@ function Tree() {
     },
 
     levelOrder(callback) { //traverses tree breadth first, applying callback to each node, or returning an array of values
-      let queue = [this.root];
-      let values = [];
+      const queue = [this.root];
+      const values = [];
 
       while (queue.length > 0) {
         let currentNode = queue.shift();
@@ -166,6 +166,33 @@ function Tree() {
       if (callback === undefined) {
         return values;
       }
+    },
+
+    inOrder(callback) {
+      const values = [];
+      let currentNode = this.root; 
+      const stack = [];
+
+      while (currentNode !== null || stack.length !== 0) {
+        if (currentNode !== null) {
+          stack.push(currentNode);
+          currentNode = currentNode.left;
+        } else {
+          currentNode = stack.pop();
+          values.push(currentNode.data);
+          currentNode = currentNode.right;
+        }
+      }
+
+      return values;
+    },
+
+    preOrder(callback) {
+
+    },
+
+    postOrder(callback) {
+
     },
 
     root: null
@@ -191,10 +218,5 @@ const tree = Tree();
 
 tree.buildTree(unsortedArray);
 
-tree.insert(2);
-
 prettyPrint(tree.root);
-
-tree.deleteItem(8);
-
-prettyPrint(tree.root);
+console.log(tree.inOrder())
