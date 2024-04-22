@@ -63,26 +63,30 @@ function Tree() {
     },
 
     insert(value) { //iterative approach to inserting a value
-      let currentNode = this.root;
-      const newNode = new Node(value);
+      if (typeof value != 'number') {
+        console.error(`Cannot insert ${value}`);
+      } else {
+        let currentNode = this.root;
+        const newNode = new Node(value);
 
-      while (currentNode !== newNode) {
-        if (currentNode.data === value) {
-          console.log(`Value ${value} exists!`);
-          break
-        } else if (currentNode.data > value) {
-          if (currentNode.left === null) {
-            currentNode.left = newNode;
-            currentNode = currentNode.left;
+        while (currentNode !== newNode) {
+          if (currentNode.data === value) {
+            console.log(`Value ${value} exists!`);
+            break
+          } else if (currentNode.data > value) {
+            if (currentNode.left === null) {
+              currentNode.left = newNode;
+              currentNode = currentNode.left;
+            } else {
+              currentNode = currentNode.left;
+            }
           } else {
-            currentNode = currentNode.left;
-          }
-        } else {
-          if (currentNode.right === null)  {
-            currentNode.right = newNode;
-            currentNode = currentNode.right;
-          } else {
-            currentNode = currentNode.right
+            if (currentNode.right === null)  {
+              currentNode.right = newNode;
+              currentNode = currentNode.right;
+            } else {
+              currentNode = currentNode.right
+            }
           }
         }
       }
@@ -114,9 +118,9 @@ function Tree() {
         }
 
         if (currentNode.left === null) {
-          currentNode === currentNode.right;
+          parentNode.right = currentNode.right;
         } else if (currentNode.right === null) {
-          currentNode === currentNode.left;
+          parentNode.left = currentNode.left;
         } else {
           let minNode = minValueNode(currentNode);
           currentNode.data = minNode.minNode.data;
@@ -142,25 +146,30 @@ function Tree() {
     },
 
     levelOrder(callback) { //iterative breadth-first traversal implementation
-      const queue = [this.root];
+      let currentNode = this.root;
+      const queue = [currentNode];
       const values = [];
 
       while (queue.length > 0) {
-        let currentNode = queue.shift();
+        let nodeCount = queue.length;
+        for (let i = 0; i < nodeCount; i++) {
+          let currentNode = queue.shift();
 
-        if (currentNode.left !== null) {
-          queue.push(currentNode.left);
+          if (currentNode.left !== null) {
+            queue.push(currentNode.left);
+          }
+
+          if (currentNode.right !== null) {
+            queue.push(currentNode.right);
+          }
+
+          values.push(currentNode.data);
+
+          if (callback !== undefined) {
+            callback(currentNode);
+          }
         }
 
-        if (currentNode.right !== null) {
-          queue.push(currentNode.right);
-        }
-        
-        values.push(currentNode.data);
-
-        if (callback !== undefined) {
-          callback(currentNode);
-        }
       }
 
       if (callback === undefined) {
@@ -244,7 +253,6 @@ function Tree() {
           stack.push(currentNode);
           currentNode = currentNode.left;
         }
-
       }
       
       if (callback === undefined) {
@@ -253,6 +261,7 @@ function Tree() {
     },
     
     height(node) {//iterative approach to find node height
+      if (node === null) return 0;
       const queue = [node];
       let level = 0;
 
@@ -295,6 +304,23 @@ function Tree() {
       return count;
     },
 
+    isBalanced(root) {//recursive approach to assess if tree balance
+      if (root === undefined) {
+        root = this.root;
+      }
+
+      if (root === null) return true;
+
+      const leftHeight = this.height(root.left);
+      const rightHeight = this.height(root.right);
+
+      if (Math.abs(leftHeight - rightHeight) <= 1 && 
+        this.isBalanced(root.left) === true && 
+        this.isBalanced(root.right) === true) return true;
+
+      return false;
+    },
+
     root: null
   }
 }
@@ -317,8 +343,17 @@ const unsortedArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 const tree = Tree();
 
 tree.buildTree(unsortedArray);
+tree.insert(6346);
+tree.insert(6347);
+tree.insert(6348);
+
+console.log(tree.isBalanced())
 
 prettyPrint(tree.root);
 
-const node = tree.find(8);
-console.log(tree.height(node));
+tree.deleteItem(6346);
+
+console.log(tree.isBalanced())
+
+prettyPrint(tree.root);
+
