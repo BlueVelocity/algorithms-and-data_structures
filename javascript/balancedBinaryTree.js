@@ -49,7 +49,7 @@ function Tree() {
     let parentNode = root;
     let currentNode = root.right;
 
-    while (currentNode.left != null) {
+    while (currentNode.left !== null) {
       parentNode = currentNode;
       currentNode = currentNode.left;
     }
@@ -66,7 +66,7 @@ function Tree() {
       let currentNode = this.root;
       const newNode = new Node(value);
 
-      while (currentNode != newNode) {
+      while (currentNode !== newNode) {
         if (currentNode.data === value) {
           console.log(`Value ${value} exists!`);
           break
@@ -128,7 +128,7 @@ function Tree() {
     find(value) { //iterative approach to finding a value
       let currentNode = this.root;
 
-      while (currentNode != null) {
+      while (currentNode !== null) {
         if (currentNode.data === value) {
           break;
         } else if (currentNode.data > value) {
@@ -148,11 +148,11 @@ function Tree() {
       while (queue.length > 0) {
         let currentNode = queue.shift();
 
-        if (currentNode.left != null) {
+        if (currentNode.left !== null) {
           queue.push(currentNode.left);
         }
 
-        if (currentNode.right != null) {
+        if (currentNode.right !== null) {
           queue.push(currentNode.right);
         }
         
@@ -251,6 +251,49 @@ function Tree() {
         return values;
       }
     },
+    
+    height(node) {//iterative approach to find node height
+      const queue = [node];
+      let level = 0;
+
+      while (queue.length > 0) {
+        let nodeCount = queue.length;
+        for (let i = 0; i < nodeCount; i++) {
+          let currentNode = queue.shift();
+
+          if (currentNode.left !== null) {
+            queue.push(currentNode.left);
+          }
+
+          if (currentNode.right !== null) {
+            queue.push(currentNode.right);
+          }
+        }
+
+        level++;
+      } 
+
+      return level - 1;
+    },
+
+    depth(node) {//iterative approach to find node depth
+      let count = 0;
+      let currentNode = this.root;
+
+      while (currentNode !== null) {
+        if (currentNode === node) {
+          break;
+        } else if (currentNode.data > node.data) {
+          count++;
+          currentNode = currentNode.left;
+        } else {
+          count++;
+          currentNode = currentNode.right;
+        }
+      }
+
+      return count;
+    },
 
     root: null
   }
@@ -277,6 +320,5 @@ tree.buildTree(unsortedArray);
 
 prettyPrint(tree.root);
 
-console.log(tree.inOrder());
-console.log(tree.preOrder());
-console.log(tree.postOrder());
+const node = tree.find(8);
+console.log(tree.height(node));
