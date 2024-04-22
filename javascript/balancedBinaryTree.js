@@ -321,6 +321,10 @@ function Tree() {
       return false;
     },
 
+    rebalance() {
+      this.root = constructTreeRecursive(this.inOrder());
+    },
+
     root: null
   }
 }
@@ -347,13 +351,8 @@ tree.insert(6346);
 tree.insert(6347);
 tree.insert(6348);
 
-console.log(tree.isBalanced())
-
 prettyPrint(tree.root);
 
-tree.deleteItem(6346);
-
-console.log(tree.isBalanced())
+tree.rebalance();
 
 prettyPrint(tree.root);
-
