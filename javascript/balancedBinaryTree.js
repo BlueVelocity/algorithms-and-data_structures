@@ -342,17 +342,56 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
    }
  };
 
-const sortedArray = [1, 2, 3, 4, 5, 22, 44, 66, 67, 98];
-const unsortedArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const tree = Tree();
+function genRandArr(max) {
+  const arr = [];
+  for (let i = 0; i < max; i++) {
+    let num;
+    do {
+      num = Math.round(Math.random() * 100);
+    } while (num === 0 || num === 100); 
 
-tree.buildTree(unsortedArray);
-tree.insert(6346);
-tree.insert(6347);
-tree.insert(6348);
+    arr.push(num);
+  }
+  return arr;
+}
 
-prettyPrint(tree.root);
+//runs a set of functions to create and manipulate a balanced binary tree
+function driver() {
+  //Create a binary search tree from an array of random numbers < 100.
+  const tree = Tree();
+  tree.buildTree(genRandArr(100));
 
-tree.rebalance();
+  //Confirm that the tree is balanced by calling isBalanced.
+  console.log(tree.isBalanced());
 
-prettyPrint(tree.root);
+  //Print out all elements in level, pre, post, and in order.
+  console.log(tree.levelOrder());
+  console.log(tree.preOrder());
+  console.log(tree.postOrder());
+  console.log(tree.inOrder());
+
+  //Unbalance the tree by adding several numbers > 100.
+  tree.insert(105);
+  tree.insert(115);
+  tree.insert(125);
+  tree.insert(135);
+
+  //Confirm that the tree is unbalanced by calling isBalanced.
+  console.log(tree.isBalanced());
+
+  //Balance the tree by calling rebalance.
+  tree.rebalance(); 
+
+  //Confirm that the tree is balanced by calling isBalanced.
+  console.log(tree.isBalanced());
+
+  //Print out all elements in level, pre, post, and in order.
+  console.log(tree.levelOrder());
+  console.log(tree.preOrder());
+  console.log(tree.postOrder());
+  console.log(tree.inOrder());
+
+  prettyPrint(tree.root);
+}
+
+driver();
