@@ -1,5 +1,3 @@
-//create an adjacency list for every sqaure on the board
-//take input of starting space and end space, search breadth first until at end node
 class Node {
   constructor(position) {
     this.position = position;
@@ -8,7 +6,6 @@ class Node {
 }
 
 class ChessBoard {
-
   constructor() {
     function constructBoard(size) {
       const board = [];
@@ -28,8 +25,8 @@ class ChessBoard {
 
   constructKnightGraph() {
     const board = this.board;
-    board.forEach( function(xAxis, index) {
-      xAxis.forEach( function(node, index) {
+    board.forEach( function(xAxis) {
+      xAxis.forEach( function(node) {
         const position = node.position;
         const adjacent = [];
 
@@ -51,30 +48,43 @@ class ChessBoard {
     });
   }
 
-  moveKnight(start, end) {
-    let queue = [this.board[start[0]][start[1]]];
-    let count = 0;
+  knightMoves(start, end) {
+    if (start[0] > 7 || start[0] < 0 || start[1] > 7 || start[1] < 0)  {
+      console.error('Invalid start position');
+      return;
+    }
+
+    if (end[0] > 7 || end[0] < 0 || end[1] > 7 || end[1] < 0) {
+      console.error('Invalid end position');
+      return;
+    };
+
+    let current = [this.board[start[0]][start[1]], [this.board[start[0]][start[1]].position]];
+    const queue  = [current];
+
     while (queue.length > 0) {
-      if (queue.length === 1) {
-        count++;
-      }
-      const current = queue.shift();
-      if (current.position[0] == end[0] && current.position[1] == end[1]) {
+      current = queue.shift();
+
+      if (current[0].position[0] === end[0] && current[0].position[1] === end[1]) {
         break;
       } else {
-        current.adjacent.forEach( (node) => {
-          queue.push(node);
-        });
+        current[0].adjacent.forEach( function(node) {
+          const newList = current[1].slice(0, current[1].length);
+
+          newList.push(node.position);
+          queue.push([node, newList]);
+        })
       }
     }
     
-    console.log(count)
-
-    //return path from start to end
+    console.log(`The knight made it in ${current[1].length - 1} moves! Here's the path:\n`, current[1]);
   }
 }
 
 let chessBoard = new ChessBoard();
 chessBoard.constructKnightGraph();
 
-chessBoard.moveKnight([0,0], [5, 3])
+const startCoordinates = [1,0];
+const endCoordinates = [7,3];
+
+chessBoard.knightMoves(startCoordinates, endCoordinates);
